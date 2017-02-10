@@ -43,6 +43,15 @@ defmodule Mongo.Ecto.NormalizedQueryNewTest do
     end
   end
 
+  defmodule Schema4 do
+    use Ecto.Schema
+
+    schema "schema3" do
+      field :map1, :map, default: %{}
+      field :binary, :binary
+    end
+  end
+
   defp normalize(query, operation \\ :all) do
     {query, params, _key} = Ecto.Query.Planner.prepare(query, operation, Mongo.Ecto)
     query = Ecto.Query.Planner.normalize(query, operation, Mongo.Ecto)
@@ -243,6 +252,9 @@ defmodule Mongo.Ecto.NormalizedQueryNewTest do
 
     query = Schema |> where([r], not (r.x == 42)) |> normalize
     assert_fields query, query: %{x: ["$ne": 42]}
+
+    query = Schema4 |> where([r], r.map1 == ^%{}) |> normalize
+    assert_fields query, query: %{map1: "{}"}
   end
 
   test "order by" do
