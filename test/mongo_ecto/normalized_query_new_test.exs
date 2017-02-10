@@ -252,9 +252,12 @@ defmodule Mongo.Ecto.NormalizedQueryNewTest do
 
     query = Schema |> where([r], not (r.x == 42)) |> normalize
     assert_fields query, query: %{x: ["$ne": 42]}
-
+    
     query = Schema4 |> where([r], r.map1 == ^%{}) |> normalize
-    assert_fields query, query: %{map1: "{}"}
+    assert_fields query, query: %{map1: []}
+
+    query = Schema4 |> where([r], r.map1 == ^%{a: 5}) |> normalize
+    assert_fields query, query: %{map1: [a: 5]}
   end
 
   test "order by" do
