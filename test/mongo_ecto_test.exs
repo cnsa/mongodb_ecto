@@ -46,6 +46,18 @@ defmodule Mongo.EctoTest do
     assert [%{"ints" => [1]}] = TestRepo.all(query)
   end
 
+  test "retrieve empty map" do
+    TestRepo.insert!(%Post{meta: %{}})
+
+    assert nil != TestRepo.get_by(Post, meta: %{})
+  end
+
+  test "retrieve non empty map" do
+    TestRepo.insert!(%Post{meta: %{a: 5}})
+
+    assert %{"a" => 5} == TestRepo.get_by(Post, meta: %{a: 5}).meta
+  end
+
   test "count" do
     TestRepo.insert!(%Post{visits: 1})
 

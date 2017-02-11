@@ -46,7 +46,7 @@ defmodule Mongo.Ecto.NormalizedQueryNewTest do
   defmodule Schema4 do
     use Ecto.Schema
 
-    schema "schema3" do
+    schema "schema4" do
       field :map1, :map, default: %{}
       field :binary, :binary
     end
